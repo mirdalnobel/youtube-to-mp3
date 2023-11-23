@@ -1,2 +1,1 @@
-pip install yt_dlp
-pip install pytube3
+pip install -r requirements.txt
