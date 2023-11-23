@@ -1,11 +1,5 @@
-import subprocess
-
-subprocess.call(['pip', 'install', '--upgrade', 'youtube_dl'])
-
 import streamlit as st
-import youtube_dl
-from pydub import AudioSegment
-from pathlib import Path
+import subprocess
 
 st.title("YouTube Playlist to MP3 Converter")
 
@@ -15,8 +9,12 @@ if st.button("Konversi ke MP3"):
     # Fungsi konversi akan dipanggil di sini
     st.write("Memulai konversi...")
 
+    # Instalasi youtube_dl di awal aplikasi
+    subprocess.call(['pip', 'install', '--upgrade', 'youtube_dl'])
+
     # Fungsi untuk mengunduh playlist
     def download_playlist(url):
+        import youtube_dl
         ydl_opts = {
             'format': 'bestaudio/best',
             'postprocessors': [{
@@ -56,4 +54,3 @@ if st.button("Konversi ke MP3"):
     convert_to_mp3()
 
     st.write("Konversi selesai! MP3 tersimpan di folder 'downloads'.")
-
