@@ -1,5 +1,7 @@
 import streamlit as st
 import subprocess
+from pathlib import Path
+from pydub import AudioSegment
 
 st.title("YouTube Playlist to MP3 Converter")
 
@@ -44,7 +46,10 @@ if st.button("Konversi ke MP3"):
     # Fungsi untuk membuat folder 'downloads' jika belum ada
     def create_downloads_folder():
         downloads_path = Path("downloads")
-        downloads_path.mkdir(exist_ok=True)
+
+        # Pastikan folder 'downloads' sudah ada
+        if not downloads_path.exists():
+            downloads_path.mkdir()
 
     # Membuat folder 'downloads' jika belum ada
     create_downloads_folder()
@@ -54,3 +59,8 @@ if st.button("Konversi ke MP3"):
     convert_to_mp3()
 
     st.write("Konversi selesai! MP3 tersimpan di folder 'downloads'.")
+
+    # Menampilkan tautan untuk mengunduh setiap file MP3
+    st.write("Unduh file MP3:")
+    for mp3_file in Path("downloads").glob("*.mp3"):
+        st.markdown(f"[{mp3_file.name}]({mp3_file.as_uri()})", unsafe_allow_html=True)
