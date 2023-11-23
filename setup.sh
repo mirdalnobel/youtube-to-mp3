@@ -1,1 +1,1 @@
-pip install pytube moviepy
+pip install yt_dlp
