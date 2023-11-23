@@ -1,3 +1,7 @@
+import subprocess
+
+subprocess.call(['pip', 'install', '--upgrade', 'youtube_dl'])
+
 import streamlit as st
 import youtube_dl
 from pydub import AudioSegment
