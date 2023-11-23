@@ -1,6 +1,7 @@
 import streamlit as st
 import subprocess
 from pathlib import Path
+from pydub import AudioSegment
 
 st.title("YouTube Playlist to MP3 Converter")
 
@@ -10,8 +11,8 @@ if st.button("Konversi ke MP3"):
     # Fungsi konversi akan dipanggil di sini
     st.write("Memulai konversi...")
 
-    # Instalasi dependensi yang diperlukan
-    subprocess.call(['pip', 'install', '--upgrade', 'youtube_dl', 'pydub'])
+    # Menjalankan skrip setup.sh untuk instalasi dependensi
+    subprocess.call('./setup.sh', shell=True)
 
     # Fungsi untuk mengunduh playlist
     def download_playlist(url):
