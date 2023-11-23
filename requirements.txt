@@ -2,3 +2,5 @@ streamlit==0.90.0
 youtube-dl==2022.9.5
 pydub==0.26.8
 yt_dlp
+pytube3
+
