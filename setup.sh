@@ -1,1 +1,1 @@
-pip install --upgrade youtube_dl pydub
+pip install pytube moviepy
