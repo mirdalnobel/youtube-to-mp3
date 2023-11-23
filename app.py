@@ -1,7 +1,6 @@
 import streamlit as st
-import subprocess
-from pathlib import Path
-from pydub import AudioSegment
+from pytube import YouTube
+from moviepy.editor import VideoFileClip
 
 st.title("YouTube Playlist to MP3 Converter")
 
@@ -11,38 +10,22 @@ if st.button("Konversi ke MP3"):
     # Fungsi konversi akan dipanggil di sini
     st.write("Memulai konversi...")
 
-    # Menjalankan skrip setup.sh untuk instalasi dependensi
-    subprocess.call('./setup.sh', shell=True)
-
     # Fungsi untuk mengunduh playlist
     def download_playlist(url):
-        import youtube_dl
-        ydl_opts = {
-            'format': 'bestaudio/best',
-            'postprocessors': [{
-                'key': 'FFmpegExtractAudio',
-                'preferredcodec': 'mp3',
-                'preferredquality': '192',
-            }],
-            'outtmpl': 'downloads/%(title)s.%(ext)s',
-            'quiet': False,  # Untuk melihat pesan kesalahan
-            'verbose': True,  # Menampilkan informasi verbose
-            'noplaylist': False,  # Memastikan bahwa ini adalah playlist
-            'extractor_args': f'--extractor-args youtube:tab',
-        }
+        playlist = YouTube(url)
+        for video in playlist.video_urls:
+            st.write(f"Downloading: {video}")
+            yt = YouTube(video)
+            ys = yt.streams.filter(only_audio=True).first()
+            ys.download('downloads')
 
-        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([url])
-
-    # Fungsi untuk mengonversi audio
+    # Fungsi untuk mengonversi video ke MP3
     def convert_to_mp3():
-        from pydub import AudioSegment
-        # Ambil semua file audio dalam format lain di folder 'downloads'
-        # Ubah setiap file ke format MP3
-        for file_path in Path("downloads").glob("*.webm"):
-            audio = AudioSegment.from_file(file_path)
-            mp3_path = file_path.with_suffix(".mp3")
-            audio.export(mp3_path, format="mp3")
+        for video_path in Path("downloads").glob("*.webm"):
+            clip = VideoFileClip(video_path)
+            mp3_path = video_path.with_suffix(".mp3")
+            clip.audio.write_audiofile(mp3_path)
+            clip.close()
 
     # Fungsi untuk membuat folder 'downloads' jika belum ada
     def create_downloads_folder():
