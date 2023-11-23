@@ -1,8 +1,7 @@
 import streamlit as st
-import subprocess
-from pathlib import Path
-import yt_dlp
+from pytube import YouTube
 from moviepy.editor import VideoFileClip
+from pathlib import Path
 
 st.title("YouTube Playlist to MP3 Converter")
 
@@ -14,22 +13,12 @@ if st.button("Konversi ke MP3"):
 
     # Fungsi untuk mengunduh playlist
     def download_playlist(url):
-        ydl_opts = {
-            'format': 'bestaudio/best',
-            'postprocessors': [{
-                'key': 'FFmpegExtractAudio',
-                'preferredcodec': 'mp3',
-                'preferredquality': '192',
-            }],
-            'outtmpl': 'downloads/%(title)s.%(ext)s',
-            'quiet': False,
-            'verbose': True,
-            'noplaylist': False,
-            'extractor_args': f'--extractor-args youtube:tab',
-        }
-
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([url])
+        playlist = YouTube(url)
+        for video in playlist.video_urls:
+            st.write(f"Downloading: {video}")
+            yt = YouTube(video)
+            ys = yt.streams.filter(only_audio=True).first()
+            ys.download('downloads')
 
     # Fungsi untuk mengonversi video ke MP3
     def convert_to_mp3():
